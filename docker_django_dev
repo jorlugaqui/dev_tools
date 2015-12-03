@@ -1,0 +1,9 @@
+# Developing with django.
+# Please check https://hub.docker.com/_/django/
+
+FROM django:onbuild
+
+
+
+
+
