@@ -1,9 +1,39 @@
-# Developing with django.
-# Please check https://hub.docker.com/_/django/
+# Set the file maintainer (your name - the file's author)
+MAINTAINER Jorge Galvis
 
-FROM django:onbuild
+# Set env variables used in this Dockerfile (add a unique prefix, such as DOCKYARD)
+# Local directory with project source
+ENV APP_SRC=.
+# Directory in container for project source files
+ENV APP_SRVPROJ=/home/app
 
+# Update the default application repository sources list
+RUN apt-get update
 
+# Install python and pip
+RUN apt-get install -y python python-pip --no-install-recommends
+
+# Install virtualenv and virtualenvwrapper
+RUN pip install virtualenv
+RUN pip install virtualenvwrapper
+
+# Add user
+RUN adduser --disabled-password --gecos '' app
+RUN adduser app sudo
+RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
+USER app
+WORKDIR /home/app
+
+# Config virtualenvwrapper
+RUN mkdir ~/.virtualenvs
+RUN export WORKON_HOME=~/.virtualenvs
+RUN echo '. /usr/local/bin/virtualenvwrapper.sh' >> ~/.bashrc
+
+# Copy application source code to SRCDIR
+COPY $APP_SRC $APP_SRVPROJ
+
+# Expose django dev port
+EXPOSE 8000
 
 
 
