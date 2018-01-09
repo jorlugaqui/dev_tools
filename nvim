@@ -1,0 +1,268 @@
+" Jorge's nvim, basically a copy of Wayne's one.
+
+
+" Install vim-plug if it does not exist
+if empty(glob('~/.config/nvim/autoload/plug.vim'))
+  silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
+endif
+
+
+" Plugins
+call plug#begin('~/.config/nvim/plugged')
+Plug 'vim-airline/vim-airline-themes'
+Plug 'bling/vim-airline'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'klen/python-mode', {'branch': 'develop'}
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'Valloric/YouCompleteMe'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'editorconfig/editorconfig-vim'
+Plug 'fatih/vim-go'
+Plug 'vim-syntastic/syntastic'
+Plug 'ekalinin/Dockerfile.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'tmhedberg/SimpylFold'
+call plug#end()
+
+
+" Better copy & paste
+set clipboard=unnamedplus
+
+
+" Mouse and backspace
+set mouse=a  " on OSX press ALT and click
+set bs=2     " make backspace behave like normal again
+
+
+" Rebind <Leader> key
+let mapleader=","
+
+
+" Enable syntax highlighting
+filetype off
+syntax on
+
+
+" Showing line numbers and length
+set number  " show line numbers
+set tw=120   " width of document (used by gd)
+set nowrap  " don't automatically wrap on load
+set fo-=t   " don't automatically wrap text when typing
+set colorcolumn=80
+highlight ColorColumn ctermbg=233
+
+
+" Useful settings
+set history=700
+set undolevels=700
+
+
+" Real programmers don't use TABs but spaces
+set shiftround
+set expandtab
+
+
+" Shell (tab width 2 chr)
+autocmd FileType sh set sw=2
+autocmd FileType sh set ts=2
+autocmd FileType sh set sts=2
+
+" Go (tab width 2 chr)
+autocmd FileType go set sw=2
+autocmd FileType go set ts=2
+autocmd FileType go set sts=2
+
+
+" HTML (tab width 2 chr, no wrapping)
+autocmd FileType html,htmldjango set sw=2
+autocmd FileType html,htmldjango set ts=2
+autocmd FileType html,htmldjango set sts=2
+autocmd FileType html,htmldjango set textwidth=0 expandtab
+
+
+" Python (tab width 4 chr)
+autocmd FileType python set sw=4
+autocmd FileType python set ts=4
+autocmd FileType python set sts=4
+
+
+" JavaScript (tab width 2 chr)
+autocmd FileType javascript set sw=2
+autocmd FileType javascript set ts=2
+autocmd FileType javascript set sts=2
+
+
+" CSS (tab width 2 chr)
+autocmd FileType css set sw=2
+autocmd FileType css set ts=2
+autocmd FileType css set sts=2
+
+
+" Make search case insensitive
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+highlight Search ctermbg=38 ctermfg=0
+
+
+" Disable swap files 
+set nobackup
+set nowritebackup
+set noswapfile
+
+
+" Color scheme.
+syntax enable
+set background=dark
+let base16colorspace=256
+silent! colorscheme base16-solarized
+
+
+" Misc.
+set encoding=utf-8
+set ruler
+set laststatus=2
+set cmdheight=2
+set wildmenu
+set showcmd
+set hidden
+set confirm
+
+
+" Disable arrow keys
+noremap <Up> <YES>
+noremap <Down> <YES>
+noremap <Left> <YES>
+noremap <Right> <YES>
+
+
+" Navigations
+nnoremap <C-j> <C-w><C-j>
+nnoremap <C-k> <C-w><C-k>
+nnoremap <C-l> <C-w><C-l>
+nnoremap <C-h> <C-w><C-h>
+set splitbelow
+set splitright
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+nnoremap <space> za
+let g:SimpylFold_docstring_preview = 1
+
+" Vim-airline.
+let g:airline_theme='powerlineish'
+let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#enabled=1
+let g:airline#extensions#tabline#fnamemod=':t'
+let g:airline#extensions#tabline#left_sep=' '
+let g:airline#extensions#tabline#left_alt_sep='|'
+
+
+" CtrlP.
+let g:ctrlp_match_window='max:15'
+let g:ctrlp_working_path_mode='ra'
+let g:ctrlp_user_command='ag %s -i --nocolor --nogroup --hidden
+      \ --ignore .git
+      \ --ignore .svn
+      \ --ignore .hg
+      \ --ignore .DS_Store
+      \ --ignore "**/node_modules/"
+      \ --ignore "**/*.pyc"
+      \ --ignore "**/*.ach"
+      \ --ignore "**/*.orig"
+      \ --ignore "**/*.lf"
+      \ --ignore ".ropeproject"
+      \ -g ""'
+
+
+" YouCompleteMe
+let g:ycm_collect_identifiers_from_tags_files=1 " Let YCM read tags from Ctags file
+let g:ycm_use_ultisnips_completer=1 " Default 1, just ensure
+let g:ycm_seed_identifiers_with_syntax=1 " Completion for programming language's keyword
+let g:ycm_complete_in_comments=1 " Completion in comments
+let g:ycm_complete_in_strings=1 " Completion in string
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+
+" Python mode
+let g:pymode_rope=1
+
+
+" Documentation
+let g:pymode_doc=1
+let g:pymode_doc_key='k'
+
+
+"Linting
+let g:pymode_lint=1
+let g:pymode_lint_checker="pylint,pep8"
+
+
+" Auto check on save
+let g:pymode_lint_write=1
+
+
+" Support virtualenv
+let g:pymode_virtualenv=1
+
+" Breakpoints
+let g:pymode_breakpoint=1
+
+" Key's map for add/remove breakpoint
+let g:pymode_breakpoint_bind='<leader>b'
+
+
+" syntax highlighting and space issues
+let g:pymode_syntax=1
+let g:pymode_syntax_all=1
+let g:pymode_syntax_indent_errors=g:pymode_syntax_all
+let g:pymode_syntax_space_errors=g:pymode_syntax_all
+
+
+" Don't autofold code
+let g:pymode_folding=0
+
+" Python Syntastic
+let g:pymode_lint_config='$HOME/.pylintrc'
+let g:pymode_options_max_line_length=120
+let g:syntastic_python_pylint_args="--load-plugins pylint_django"
+let g:syntastic_python_flake8_args='--ignore=E501,E225'
+
+" NerdTree
+map <F1> :NERDTreeToggle<CR>
+let NERDTreeIgnore=['\.pyc$']
+let g:NERDTreeWinSize=40
+
+
+" Ultisnips
+let g:UltiSnipsUsePythonVersion=3
+let g:UltiSnipsExpandTrigger="<c-k>"
+
+
+" Go configs
+let g:go_highlight_functions=1
+let g:go_highlight_methods=1
+let g:go_highlight_fields=1
+let g:go_highlight_types=1
+let g:go_highlight_operators=1
+let g:go_highlight_build_constraints=1
+
+
+" JavaScript configs
+let g:syntastic_javascript_checkers=['eslint']
+
+
+" React configs
+let g:jsx_ext_required=0 " Allow JSX in normal JS files
+
+
+" EditorConfig
+let g:EditorConfig_core_mode='external_command'
+let g:EditorConfig_exclude_patterns=['fugitive://.*', 'scp://.*']"<Paste>
